@@ -1,3 +1,7 @@
+# Custom ones
+.deps/*
+!.deps/.gitkeep
+
 
 # Created by https://www.gitignore.io/api/archives
 
