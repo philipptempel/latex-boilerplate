@@ -59,12 +59,12 @@ $(DEPS_DIR): ## Create dependencies directory
 
 .PHONY: clean
 clean: ## Clean directory from intermediate files
-	$(LATEXMK) -C *.tex
+	$(LATEXMK) -c *.tex
 	rm -f $(DEPS_DIR)/*
 
 .PHONY: distclean
 distclean: clean ## Clean directory from all files
-	$(LATEXMK) -CA *.tex
+	$(LATEXMK) -C *.tex
 	rm -f *.makefile
 	rm -f $(FINAL).tex
 	rm -f tikz/*
