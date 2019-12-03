@@ -1,5 +1,5 @@
 # Default file to compile
-@default_files = ('source.tex');
+@default_files = ('draft.tex');
 
 # Use lualatex
 $pdflatex = 'lualatex --shell-escape -bibtex --synctex=1 %O %S';
