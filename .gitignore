@@ -1,6 +1,7 @@
 # Custom ones
 .deps/*
 !.deps/.gitkeep
+final.tex
 
 
 # Created by https://www.gitignore.io/api/archives
