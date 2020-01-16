@@ -38,11 +38,17 @@ endef
 export PRINT_HELP_PYSCRIPT
 
 .PHONY: all
-all: $(DRAFT).pdf $(FINAL).pdf ## Make all files
+all: $(DRAFT) $(FINAL) ## Make all files
 
 .PHONY: list
 list: ## List all available targets
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+
+.PHONY: $(FINAL)
+$(FINAL): $(FINAL).pdf
+
+.PHONY: $(DRAFT)
+$(DRAFT): $(DRAFT).pdf
 
 $(FINAL).pdf: $(FINAL).tex | $(DEPS_DIR) ## Create the FINAL version
 	$(LATEXMK) -deps-out=$(DEPS_DIR)/$(FINAL).deps $(LFLAGS) $<
