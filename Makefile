@@ -9,18 +9,7 @@ DRAFT = draft
 # Latexmk compiler
 LATEXMK = latexmk
 # Latexmk options
-LFLAGS := -recorder -use-make -deps \
-					-e 'warn qq(In Makefile, turn off custom dependencies\n);' \
-					-e '@cus_dep_list = ();' \
-					-e 'show_cus_dep();' \
-					-pdflatex='lualatex --shell-escape --synctex=1 %O %S' \
-					$(LFLAGS)
-# Where to store dependencies as found by LATEXMK
-DEPS_DIR = .deps
-# All dependencies lists files
-DEPS_FILES = $(wildcard $(DEPS_DIR)/*.deps)
-# Load all dependencies
-$(foreach file,$(DEPS_FILES),$(eval -include $(file)))
+LFLAGS := 
 
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -51,14 +40,14 @@ $(FINAL): $(FINAL).pdf
 $(DRAFT): $(DRAFT).pdf
 
 $(FINAL).pdf: $(FINAL).tex | $(DEPS_DIR) ## Create the FINAL version
-	$(LATEXMK) -deps-out=$(DEPS_DIR)/$(FINAL).deps $(LFLAGS) $<
+	$(LATEXMK) $(LFLAGS) $<
 
 $(FINAL).tex: $(DRAFT).tex ## Create the document for the FINAL version
 	cp $< $@
 	sed -i.bak s/draft,//g $@
 
 %.pdf: %.tex | $(DEPS_DIR) ## Create PDFs from existing TEX files
-	$(LATEXMK) -deps-out=$(DEPS_DIR)/$*.deps $(LFLAGS) $<
+	$(LATEXMK) $(LFLAGS) $<
 
 $(DEPS_DIR): ## Create dependencies directory
 	@mkdir -p $@
