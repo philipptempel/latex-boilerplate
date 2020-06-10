@@ -1,4 +1,5 @@
 before_script:
+  - 'curl --location --silent -- https://bootstrap.pypa.io/get-pip.py | python3'
   - 'pip3 install --upgrade click'
 
 draft:
