@@ -3,6 +3,7 @@ before_script:
 
 draft:
   image: philipptempel/docker-ubuntu-tug-texlive:2020
+  stage: build
   script:
     - 'make draft'
   artifacts:
@@ -14,6 +15,7 @@ draft:
 
 final:
   image: philipptempel/docker-ubuntu-tug-texlive:2020
+  stage: build
   script:
     - 'make final'
   artifacts:
