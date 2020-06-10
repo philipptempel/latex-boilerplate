@@ -39,7 +39,7 @@ $(FINAL): $(FINAL).pdf
 .PHONY: $(DRAFT)
 $(DRAFT): $(DRAFT).pdf
 
-$(FINAL).pdf: $(FINAL).tex | $(DEPS_DIR) ## Create the FINAL version
+$(FINAL).pdf: $(FINAL).tex ## Create the FINAL version
 	$(LATEXMK) $(LFLAGS) $<
 
 $(FINAL).tex: $(DRAFT).tex ## Create the document for the FINAL version
@@ -49,13 +49,9 @@ $(FINAL).tex: $(DRAFT).tex ## Create the document for the FINAL version
 %.pdf: %.tex | $(DEPS_DIR) ## Create PDFs from existing TEX files
 	$(LATEXMK) $(LFLAGS) $<
 
-$(DEPS_DIR): ## Create dependencies directory
-	@mkdir -p $@
-
 .PHONY: clean
 clean: ## Clean directory from intermediate files
 	$(LATEXMK) -c *.tex
-	rm -f $(DEPS_DIR)/*
 
 .PHONY: distclean
 distclean: clean ## Clean directory from all files
