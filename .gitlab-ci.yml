@@ -1,7 +1,21 @@
-compile_pdf:
-  image: philipptempel/docker-ubuntu-tug-texlive:2019
+before_script:
+  - 'pip3 install --upgrade click'
+
+draft:
+  image: philipptempel/docker-ubuntu-tug-texlive:2020
   script:
-    - latexmk
+    - 'make draft'
+  artifacts:
+    name: "${CI_PROJECT_PATH_SLUG}_${CI_COMMIT_REF_NAME}"
+    paths:
+      - '*.pdf'
+  tags:
+    - docker
+
+final:
+  image: philipptempel/docker-ubuntu-tug-texlive:2020
+  script:
+    - 'make final'
   artifacts:
     name: "${CI_PROJECT_PATH_SLUG}_${CI_COMMIT_REF_NAME}"
     paths:
