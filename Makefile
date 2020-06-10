@@ -43,8 +43,7 @@ $(FINAL).pdf: $(FINAL).tex ## Create the FINAL version
 	$(LATEXMK) $(LFLAGS) $<
 
 $(FINAL).tex: $(DRAFT).tex ## Create the document for the FINAL version
-	cp $< $@
-	sed -i.bak s/draft,//g $@
+	git show $(git branch | grep "\*" | cut -d ' ' -f2):"$<" | python3 finalizer.py -- - > $(FINAL).tex
 
 %.pdf: %.tex | $(DEPS_DIR) ## Create PDFs from existing TEX files
 	$(LATEXMK) $(LFLAGS) $<
