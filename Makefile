@@ -29,6 +29,16 @@ export PRINT_HELP_PYSCRIPT
 .PHONY: all
 all: $(DRAFT) $(FINAL) ## Make all files
 
+.PHONY: venv
+venv: ## Create the python virtual environment
+	python3 -m pip install --upgrade --user virtualenv
+	virtualenv --python=$(which python3) --always-copy ./.venv
+
+.PHONY: setup
+setup: venv ## Install all python requirements
+	. ./.venv/bin/activate
+	pip install -r requirements.txt
+
 .PHONY: list
 list: ## List all available targets
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -59,3 +69,4 @@ distclean: clean ## Clean directory from all files
 	rm -f $(FINAL).tex
 	rm -f tikz/*
 	rm -f *.bak
+	rm -rf ./.venv
