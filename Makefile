@@ -44,18 +44,18 @@ list: ## List all available targets
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 .PHONY: $(FINAL)
-$(FINAL): $(FINAL).pdf
+$(FINAL): $(FINAL).pdf ## Build the `final` PDF version
 
 .PHONY: $(DRAFT)
-$(DRAFT): $(DRAFT).pdf
+$(DRAFT): $(DRAFT).pdf ## Build the `draft` PDF version
 
 $(FINAL).pdf: $(FINAL).tex ## Create the FINAL version
 	$(LATEXMK) $(LFLAGS) $<
 
-$(FINAL).tex: $(DRAFT).tex ## Create the document for the FINAL version
+$(FINAL).tex: $(DRAFT).tex ## Create the TeX document for the `final` PDF version
 	git show $(git branch | grep "\*" | cut -d ' ' -f2):"$<" | python3 finalizer.py -- - > $(FINAL).tex
 
-%.pdf: %.tex | $(DEPS_DIR) ## Create PDFs from existing TEX files
+%.pdf: %.tex ## Create PDFs from existing TEX files
 	$(LATEXMK) $(LFLAGS) $<
 
 .PHONY: clean
