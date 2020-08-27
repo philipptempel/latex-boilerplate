@@ -31,13 +31,17 @@ all: $(DRAFT) $(FINAL) ## Make all files
 
 .PHONY: venv
 venv: ## Create the python virtual environment
-	python3 -m pip install --upgrade --user virtualenv
+	python3 -m pip install --upgrade virtualenv
 	virtualenv --python=$(which python3) --always-copy ./.venv
 
 .PHONY: setup
 setup: venv ## Install all python requirements
-	. ./.venv/bin/activate
-	pip install -r requirements.txt
+	( \
+		[ -f ".venv/bin/activate" ] && . .venv/bin/activate; \
+		[ -f ".venv/Scripts/activate" ] && . .venv/Scripts/activate; \
+		python -m pip install --upgrade pip; \
+		pip install --upgrade -r requirements.txt; \
+	)
 
 .PHONY: list
 list: ## List all available targets
@@ -49,24 +53,25 @@ $(FINAL): $(FINAL).pdf ## Build the `final` PDF version
 .PHONY: $(DRAFT)
 $(DRAFT): $(DRAFT).pdf ## Build the `draft` PDF version
 
-$(FINAL).pdf: $(FINAL).tex ## Create the FINAL version
-	$(LATEXMK) $(LFLAGS) $<
-
 $(FINAL).tex: $(DRAFT).tex ## Create the TeX document for the `final` PDF version
 	git show $(git branch | grep "\*" | cut -d ' ' -f2):"$<" | python3 finalizer.py -- - > $(FINAL).tex
 
 %.pdf: %.tex ## Create PDFs from existing TEX files
 	$(LATEXMK) $(LFLAGS) $<
+	cp "$@" "$*_$(shell git rev-parse --short HEAD).pdf"
 
 .PHONY: clean
-clean: ## Clean directory from intermediate files
+clean: mostlyclean ## Clean directory from intermediate files
+	$(LATEXMK) -C *.tex
+	rm -f $(FINAL).tex
+
+.PHONY: mostlyclean
+mostlyclean: ## Like `clean` but not as clean
 	$(LATEXMK) -c *.tex
 
 .PHONY: distclean
 distclean: clean ## Clean directory from all files
-	$(LATEXMK) -C *.tex
 	rm -f *.makefile
-	rm -f $(FINAL).tex
 	rm -f tikz/*
 	rm -f *.bak
 	rm -rf ./.venv
