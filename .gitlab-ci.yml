@@ -1,4 +1,5 @@
 before_script:
+  - 'apt-get update'
   - 'apt-get install -qy python3-pip'
   - 'python3 -m pip install --upgrade pip'
   - 'pip3 install --upgrade click'
