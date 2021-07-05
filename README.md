@@ -10,13 +10,13 @@ By default, this project gives you the following file and directory structure fo
 * `algorithms/`
 * `animations/`
 * `appendix/`
-* `config/`
 * `content/`
 * `data/`
 * `glossaries/`
 * `figures/`
 * `images/`
 * `listings/`
+* `preamble/`
 * `tables/`
 * `.latexmkrc-win`
 * `.latexmkrc-macos`
@@ -73,14 +73,6 @@ As the name suggests, content that is not within your main document but seen as 
 Speaking LaTeX, there's actually no difference if you put your appendix into the main `content/` directory (or `content/appendix/`), but I feel your directory is going to be looking cleaner if you physically have actual content separate from your appendix.
 
 
-### config
-
-Use this directory to put any configuration of your document into.
-Be it additional packages you need to load, configuration of loaded packages like `siunitx`, layout adjustments or macro/environment definitions.
-
-If you prefer, keep your different configuration files separate i.e., have one for loading packages, one for macro definitions, one for environment definitions, one for loading TikZ libraries.
-You get the idea.
-
 ### content
 
 As the name suggests, all your content `tex`-files should go in here.
@@ -92,12 +84,14 @@ Simple as that.
 How you further break down your content (I'd suggest creating files on a `\subsection` level) is up to you.
 Also, prefixing or suffixing your file with the section number might be your thing - but keep in mind that you might rearrange sections in your document and that would require you to also change the filename of the corresponding `tex` files.
 
+
 ### data
 
 It is preferable to have graphs (2D or 3D) available as `tikz` files as they will be rendered as vector graphics and will also pick up the environment's style (font family, font size, font weight, etc.).
 To keep markup from content separate (as LaTeX does), we should keep the markup of our figures separate from the data.
 Thus, the data used to generate a plot will be put into the `data` directory, while the `tikz` markup is located inside the `figures` directory (see below).
 It is recommended to keep the same naming convention inside the `data` and `figures` directory.
+
 
 ### figures
 
@@ -106,6 +100,7 @@ However, I prefer to think of figures as anything that is a data-based plot or g
 This directory contains all these `tikzpicture`s.
 Within the `figures/` directory, you can throw everything in at the top level or add additional sublevel directories to split by sections or content.
 
+
 ### glossaries
 
 Any good document requires some glossaries be it acronyms, notation, or a list of symbols used.
@@ -113,17 +108,29 @@ The most powerful package is `glossaries`, yet there's nothing more important th
 I prefer to have my glossaries in a separate directory rather than within my content directory.
 Thus, you may also want to throw all your glossaries into this directory.
 
+
 ### images
 
 In contrast to figures, images are all documents that can be thought of as being pre-compiled.
 This includes anything from `png`, `jpeg`, `pdf` to `eps` or `ps` files.
 Whenever the object to be drawn does not consist of textual markup, it is considered an image and will be kept in the `images/` directory.
 
+
 ### listings
 
 Some documents may also include source code listings.
 These floating environments should be treated much like any other floating environment: separate markup from content.
 Your markup of a listing goes into the corresponding `tex`-file inside the `content/` directory while the actual content/data goes into the corresponding `tex`-file inside the `listings/` directory.
+
+
+### preamble
+
+Use this directory to put any preamble configuration of your document into.
+Be it additional packages you need to load, configuration of loaded packages like `siunitx`, layout adjustments or macro/environment definitions.
+
+If you prefer, keep your different configuration files separate i.e., have one for loading packages, one for macro definitions, one for environment definitions, one for loading TikZ libraries.
+You get the idea.
+
 
 ### tables
 
@@ -132,12 +139,15 @@ These can be quite long at times and take up space in your actual document.
 Think of it in the same way as you do for figures/images: you do not copy them into the document but actually include these figures via `\includegraphics{figures/…}`.
 Why not do this with tables, too? Also, this allows re-using tables in multiple documents as you only need to copy the table data in one single file and won't ever have to skim through your document finding the table.
 
+
 ### videos
 
 This folder will most likely only be necessary for presentations typeset with LaTeX, however, you may abuse your document PDF to include a video, too.
 This folder may be used to store videos (sidenote: think about enabling git LFS on your repository and on files in this directoyr — or for that matter for `*.mp4` or other video formats).
 
+
 ## Files
+
 
 ### .latexmkrc-*
 
@@ -150,6 +160,7 @@ If you have a `.latexmkrc` in your project's root directory (and it's configured
 
 Depending on your OS, you want to copy the respective `.latexmkrc-*` file to `.latexmkrc` and start using it.
 The main difference is the previewer being set differently on Windows and on macOS: on Windows, `sumatraPDF` is being used by default while macOS has `Previewer.app` set as default.
+
 
 ### .gitignore
 
@@ -169,6 +180,7 @@ The provided `.gitignore` file contains the following ignore definitions from [g
 * tags
 * tex
 * windows
+
 
 ### .gitlab-ci.yml
 
