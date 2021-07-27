@@ -1,3 +1,6 @@
+# Set a default BASh shell
+SHELL = /usr/bin/env bash
+
 # Set up a default goal
 .DEFAULT_GOAL = list
 
@@ -30,32 +33,33 @@ export PRINT_HELP_PYSCRIPT
 all: $(DRAFT) $(FINAL) ## Make all files
 
 .PHONY: venv
-venv: ## Create the python virtual environment
+venv:  ## Create the python virtual environment
 	python3 -m pip install --upgrade virtualenv
 	virtualenv --python=$(which python3) --always-copy ./.venv
 
 .PHONY: setup
+setup: SHELL = ./pythonsh
 setup: venv ## Install all python requirements
-	( \
-		[ -f ".venv/bin/activate" ] && . .venv/bin/activate; \
-		[ -f ".venv/Scripts/activate" ] && . .venv/Scripts/activate; \
-		python -m pip install --upgrade pip; \
-		pip install --upgrade -r requirements.txt; \
-	)
+	python -m pip install --upgrade pip;
+	pip install --upgrade -r requirements.txt;
 
 .PHONY: list
 list: ## List all available targets
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 .PHONY: $(FINAL)
+$(FINAL): SHELL = ./pythonsh
 $(FINAL): $(FINAL).pdf ## Build the `final` PDF version
 
 .PHONY: $(DRAFT)
+$(DRAFT): SHELL = ./pythonsh
 $(DRAFT): $(DRAFT).pdf ## Build the `draft` PDF version
 
+$(FINAL).tex: SHELL = ./pythonsh
 $(FINAL).tex: $(DRAFT).tex ## Create the TeX document for the `final` PDF version
 	git show $(git branch | grep "\*" | cut -d ' ' -f2):"$<" | python3 finalizer.py -- - > $(FINAL).tex
 
+%.pdf: SHELL = ./pythonsh
 %.pdf: %.tex ## Create PDFs from existing TEX files
 	$(LATEXMK) $(LFLAGS) $<
 	cp "$@" "$*_$(shell git rev-parse --short HEAD).pdf"
