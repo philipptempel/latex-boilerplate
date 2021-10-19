@@ -5,7 +5,7 @@ before_script:
   - 'pip3 install --upgrade click'
 
 draft:
-  image: philipptempel/docker-ubuntu-tug-texlive:2020
+  image: registry.gitlab.com/philipptempel/docker-ubuntu-tug-texlive/latest:full
   stage: build
   script:
     - 'make draft'
@@ -17,7 +17,7 @@ draft:
     - docker
 
 final:
-  image: philipptempel/docker-ubuntu-tug-texlive:2020
+  image: registry.gitlab.com/philipptempel/docker-ubuntu-tug-texlive/latest:full
   stage: build
   script:
     - 'make final'
