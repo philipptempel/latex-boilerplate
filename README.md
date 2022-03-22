@@ -7,17 +7,17 @@ That also implies it may not be the right thing for you if you're a starter, but
 
 By default, this project gives you the following file and directory structure for your project
 
-* `algorithms/`
-* `animations/`
+* `algorithm/`
+* `animation/`
 * `appendix/`
 * `content/`
 * `data/`
-* `glossaries/`
-* `figures/`
-* `images/`
-* `listings/`
+* `glossary/`
+* `figure/`
+* `image/`
+* `listing/`
 * `preamble/`
-* `tables/`
+* `table/`
 * `.latexmkrc-win`
 * `.latexmkrc-macos`
 * `.gitignore`
@@ -63,8 +63,8 @@ This would be the folder for you to keep all algorithm or code snippets in that 
 ### animations
 
 After having found out, how to create animations using the `animate` package that is able to render both TikZ and psplots as animations, I added this directory.
-It is very similar to the `figures/` directory as it is supposed to keep the raw animation files - not their data, this'll belong into `data/`.
-Using the `animations/` directory, you can move your animations into standalone files that contain all logic to render the animation, allowing you to have reusable code.
+It is very similar to the `figure/` directory as it is supposed to keep the raw animation files - not their data, this'll belong into `data/`.
+Using the `animation/` directory, you can move your animations into standalone files that contain all logic to render the animation, allowing you to have reusable code.
 
 
 ### appendix
@@ -88,23 +88,23 @@ Also, prefixing or suffixing your file with the section number might be your thi
 ### data
 
 It is preferable to have graphs (2D or 3D) available as `tikz` files as they will be rendered as vector graphics and will also pick up the environment's style (font family, font size, font weight, etc.).
-To keep markup from content separate (as LaTeX does), we should keep the markup of our figures separate from the data.
-Thus, the data used to generate a plot will be put into the `data` directory, while the `tikz` markup is located inside the `figures` directory (see below).
-It is recommended to keep the same naming convention inside the `data` and `figures` directory.
+To keep markup from content separate (as LaTeX does), we should keep the markup of our figure separate from the data.
+Thus, the data used to generate a plot will be put into the `data` directory, while the `tikz` markup is located inside the `figure` directory (see below).
+It is recommended to keep the same naming convention inside the `data` and `figure` directory.
 
 
-### figures
+### figure
 
-You might ask yourself "why is there a `figures/` and an `images/` directory? Isn't everything a figure at its core?" and you are technically right.
+You might ask yourself "why is there a `figure/` and an `image/` directory? Isn't everything a figure at its core?" and you are technically right.
 However, I prefer to think of figures as anything that is a data-based plot or generated from actual text (for my documents, this mostly implies TikZ/pgfplots).
 This directory contains all these `tikzpicture`s.
-Within the `figures/` directory, you can throw everything in at the top level or add additional sublevel directories to split by sections or content.
+Within the `figure/` directory, you can throw everything in at the top level or add additional sublevel directories to split by sections or content.
 
 
 ### glossaries
 
 Any good document requires some glossaries be it acronyms, notation, or a list of symbols used.
-The most powerful package is `glossaries`, yet there's nothing more important than a powerful directory hierarchy.
+The most powerful package is `glossary`, yet there's nothing more important than a powerful directory hierarchy.
 I prefer to have my glossaries in a separate directory rather than within my content directory.
 Thus, you may also want to throw all your glossaries into this directory.
 
@@ -113,14 +113,14 @@ Thus, you may also want to throw all your glossaries into this directory.
 
 In contrast to figures, images are all documents that can be thought of as being pre-compiled.
 This includes anything from `png`, `jpeg`, `pdf` to `eps` or `ps` files.
-Whenever the object to be drawn does not consist of textual markup, it is considered an image and will be kept in the `images/` directory.
+Whenever the object to be drawn does not consist of textual markup, it is considered an image and will be kept in the `image/` directory.
 
 
 ### listings
 
 Some documents may also include source code listings.
 These floating environments should be treated much like any other floating environment: separate markup from content.
-Your markup of a listing goes into the corresponding `tex`-file inside the `content/` directory while the actual content/data goes into the corresponding `tex`-file inside the `listings/` directory.
+Your markup of a listing goes into the corresponding `tex`-file inside the `content/` directory while the actual content/data goes into the corresponding `tex`-file inside the `listing/` directory.
 
 
 ### preamble
@@ -136,7 +136,7 @@ You get the idea.
 
 Another floating environment in LaTeX are tables.
 These can be quite long at times and take up space in your actual document.
-Think of it in the same way as you do for figures/images: you do not copy them into the document but actually include these figures via `\includegraphics{figures/…}`.
+Think of it in the same way as you do for figures/images: you do not copy them into the document but actually include these figures via `\includegraphics{figure/…}`.
 Why not do this with tables, too? Also, this allows re-using tables in multiple documents as you only need to copy the table data in one single file and won't ever have to skim through your document finding the table.
 
 
