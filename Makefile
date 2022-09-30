@@ -1,4 +1,4 @@
-# Set a default BASh shell
+# Set a default BASH shell
 SHELL = /usr/bin/env bash
 
 # Set up a default goal
@@ -32,50 +32,41 @@ export PRINT_HELP_PYSCRIPT
 .PHONY: all
 all: $(DRAFT) $(FINAL) ## Make all files
 
-.PHONY: venv
-venv:  ## Create the python virtual environment
-	python3 -m pip install --upgrade virtualenv
-	virtualenv --python=$(which python3) --always-copy ./.venv
-
-.PHONY: setup
-setup: SHELL = ./pythonsh
-setup: venv ## Install all python requirements
-	python -m pip install --upgrade pip;
-	pip install --upgrade -r requirements.txt;
-
 .PHONY: list
 list: ## List all available targets
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 .PHONY: $(FINAL)
-$(FINAL): SHELL = ./pythonsh
 $(FINAL): $(FINAL).pdf ## Build the `final` PDF version
 
 .PHONY: $(DRAFT)
-$(DRAFT): SHELL = ./pythonsh
 $(DRAFT): $(DRAFT).pdf ## Build the `draft` PDF version
 
-$(FINAL).tex: SHELL = ./pythonsh
 $(FINAL).tex: $(DRAFT).tex ## Create the TeX document for the `final` PDF version
-	git show $(git branch | grep "\*" | cut -d ' ' -f2):"$<" | python3 finalizer.py -- - > $(FINAL).tex
+	echo "%% This file is auto-generated" > $*.tex
+	echo "%% Do not modify it unless you know what you are doing" >> $*.tex
+	echo "\let\oldExecuteOptions\ExecuteOptions" >> $*.tex
+	echo "\def\ExecuteOptions#1{\oldExecuteOptions{#1,final}}" >> $*.tex
+	echo "\input{$<}" >> $*.tex
 
-%.pdf: SHELL = ./pythonsh
 %.pdf: %.tex ## Create PDFs from existing TEX files
 	$(LATEXMK) $(LFLAGS) $<
 	cp "$@" "$*_$(shell git rev-parse --short HEAD).pdf"
 
 .PHONY: clean
-clean: mostlyclean ## Clean directory from intermediate files
-	$(LATEXMK) -C *.tex
+clean: ## Clean directory from intermediate files
+	$(LATEXMK) -C $(DRAFT) $(FINAL)
 	rm -f $(FINAL).tex
 
 .PHONY: mostlyclean
 mostlyclean: ## Like `clean` but not as clean
-	$(LATEXMK) -c *.tex
+	$(LATEXMK) -c $(DRAFT) $(FINAL)
 
 .PHONY: distclean
-distclean: clean ## Clean directory from all files
+distclean: ## Clean directory from all files
+	$(LATEXMK) -CA $(DRAFT) $(FINAL)
+	rm -f $(DRAFT)_*.pdf
+	rm -f $(FINAL)_*.pdf
 	rm -f *.makefile
 	rm -f tikz/*
 	rm -f *.bak
-	rm -rf ./.venv
